@@ -1,0 +1,6 @@
+logging:
+  level: INFO
+  loggers:
+    com.narvar.services: DEBUG
+hazelcastConfigFileName: hazelcast.xml
+rateLimit: 10
