@@ -20,10 +20,10 @@ How to start the UrlShortner application
 Health Check
 ---
 
-To see your applications health enter url `http://localhost:8081/healthcheck`
+To see applications health url `http://localhost:8081/healthcheck`
 
 ---
-##Docker
+## Docker
 Docker file is included.
 
 ### To build

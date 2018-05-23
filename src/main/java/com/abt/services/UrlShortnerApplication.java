@@ -30,7 +30,7 @@ public class UrlShortnerApplication extends Application<UrlShortnerConfiguration
         DistributedMapProvider mapProvider = DistributedMapProvider.getInstance();
         mapProvider.init(configuration.getHazelcastConfigFileName());
         environment.jersey().register(new RateLimitFilter(configuration.getRateLimit()));
-        environment.jersey().register(new UrlShortnerResource());
+        environment.jersey().register(new UrlShortnerResource(configuration.getHostName()));
 
         environment.healthChecks().register("URL-SHORTENER", new AppHealthCheck());
     }

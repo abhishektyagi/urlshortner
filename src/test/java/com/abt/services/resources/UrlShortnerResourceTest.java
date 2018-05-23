@@ -7,6 +7,6 @@ package com.abt.services.resources;
  * on 23/05/18 12:24 PM.
  */
 
-public class UrlShortnerResource {
+public class UrlShortnerResourceTest {
 
 }

@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
 
 /**
  * @author Abhishek Tyagi [abhishek.tyagi@zoomcar.com]
- * @since 1.0.8
+ * @since 1.0
  * Part of urlshortner
  * on 23/05/18 12:25 PM.
  */
@@ -21,9 +21,11 @@ import java.net.URISyntaxException;
 public class UrlShortnerResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(UrlShortnerResource.class);
     private URLShortnerManager manager;
+    private final String hostname;
 
-    public UrlShortnerResource() {
+    public UrlShortnerResource(String hostname) {
         manager = URLShortnerManager.getInstance();
+        this.hostname = hostname;
     }
 
     @POST
@@ -31,16 +33,16 @@ public class UrlShortnerResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createURL(@FormParam("url") String url) {
-        LOGGER.info("Generate Shortened URL: {}",url);
+        LOGGER.info("Generate Shortened URL: {}", url);
         validateURI(url);
-        String result = "http://localhost:8080/"+manager.create(url);
-        LOGGER.info("URL generated: {}",result);
+        String result = this.hostname + manager.create(url);
+        LOGGER.info("URL generated: {}", result);
         try {
             URI uri = new URI(result);
             return Response.created(uri).build();
         } catch (URISyntaxException e) {
-            LOGGER.error("Error while parsing url: {}",url, e);
-            throw new WebApplicationException("Error in generating url.",500);
+            LOGGER.error("Error while parsing url: {}", url, e);
+            throw new WebApplicationException("Error in generating url.", 500);
         }
 
     }
@@ -48,9 +50,9 @@ public class UrlShortnerResource {
     @GET
     @Path("/{key}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response redirect(@PathParam("key") String key){
+    public Response redirect(@PathParam("key") String key) {
         String result = manager.get(key);
-        return  Response.seeOther(validateURI(result)).build();
+        return Response.seeOther(validateURI(result)).build();
     }
 
 
