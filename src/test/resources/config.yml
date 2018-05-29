@@ -5,3 +5,18 @@ logging:
 hazelcastConfigFileName: hazelcast.xml
 rateLimit: 10
 hostName: http://localhost:8080/
+database:
+  checkConnectionWhileIdle: true
+  driverClass: com.mysql.jdbc.Driver
+  evictionInterval: 10s
+  maxSize: 32
+  maxWaitForConnection: 1s
+  minIdleTime: "1 minute"
+  minSize: 8
+  password: ~
+  properties:
+    charSet: UTF-8
+  url: "jdbc:mysql://localhost/URLS"
+  user: root
+  validationQuery: "SELECT 1"
+  validationQueryTimeout: 3s

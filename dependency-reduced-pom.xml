@@ -115,6 +115,7 @@
     </dependencies>
   </dependencyManagement>
   <properties>
+    <mysql-connector.version>5.1.39</mysql-connector.version>
     <dropwizard.version>1.3.2</dropwizard.version>
     <mainClass>com.abt.services.UrlShortnerApplication</mainClass>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

@@ -2,6 +2,8 @@ package com.abt.services.core;
 
 import com.abt.services.UrlShortnerApplication;
 import com.abt.services.UrlShortnerConfiguration;
+import com.abt.services.api.Link;
+import com.abt.services.api.LinkBuilder;
 import io.dropwizard.testing.ResourceHelpers;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.After;
@@ -36,14 +38,18 @@ public class URLShortnerManagerTest {
     @Test
     public void createSuccess() {
         String url = "https://www.zoomcar.com/bangalore";
-        String result = manager.create(url);
+        LinkBuilder linkBuilder = new LinkBuilder();
+        linkBuilder.setUrl(url).setTenant("test");
+        String result = manager.create(linkBuilder.createLink());
         assertNotNull(result);
     }
 
     @Test
     public void get() {
-        String url = "https://www.zoomcar.com/bangalore";
-        String result = manager.create(url);
+        String url = "https://www.zoomcar.com/bangalore/";
+        LinkBuilder linkBuilder = new LinkBuilder();
+        linkBuilder.setUrl(url).setTenant("test");
+        String result = manager.create(linkBuilder.createLink());
         assertNotNull(result);
         String state = manager.get(result);
         assertEquals(url, state);

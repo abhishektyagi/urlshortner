@@ -1,10 +1,13 @@
 package com.abt.services.resources;
 
+import com.abt.services.api.Link;
 import com.abt.services.core.URLShortnerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
@@ -19,6 +22,9 @@ import java.net.URISyntaxException;
 
 @Path("/")
 public class UrlShortnerResource {
+    @Context
+    private HttpServletRequest context;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(UrlShortnerResource.class);
     private URLShortnerManager manager;
     private final String hostname;
@@ -32,16 +38,16 @@ public class UrlShortnerResource {
     @Path("url")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createURL(@FormParam("url") String url) {
-        LOGGER.info("Generate Shortened URL: {}", url);
-        validateURI(url);
-        String result = this.hostname + manager.create(url);
+    public Response createURL(@BeanParam Link link) {
+        LOGGER.info("Generate Shortened URL: {}", link);
+        validateURI(link.getUrl());
+        String result = this.hostname + manager.create(link);
         LOGGER.info("URL generated: {}", result);
         try {
             URI uri = new URI(result);
             return Response.created(uri).build();
         } catch (URISyntaxException e) {
-            LOGGER.error("Error while parsing url: {}", url, e);
+            LOGGER.error("Error while parsing url: {}", link.getUrl(), e);
             throw new WebApplicationException("Error in generating url.", 500);
         }
 
@@ -51,6 +57,9 @@ public class UrlShortnerResource {
     @Path("/{key}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response redirect(@PathParam("key") String key) {
+        if (context != null) {
+            LOGGER.info(context.getQueryString());
+        }
         String result = manager.get(key);
         return Response.seeOther(validateURI(result)).build();
     }
